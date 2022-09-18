@@ -21,9 +21,12 @@ defmodule PlateSlateWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", PlateSlateWeb do
-  #   pipe_through :api
-  # end
+  scope "/" do
+    pipe_through :api
+
+    forward "/graphiql", Absinthe.Plug.GraphiQL, schema: PlateSlateWeb.Schema
+    forward "/api", Absinthe.Plug, schema: PlateSlateWeb.Schema
+  end
 
   # Enables LiveDashboard only for development
   #
