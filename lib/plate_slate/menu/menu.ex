@@ -243,8 +243,10 @@ defmodule PlateSlate.Menu do
       %Ecto.Changeset{source: %Item{}}
 
   """
-  def change_item(%Item{} = item) do
-    Item.changeset(item, %{})
+  def change_item(attrs \\ %{}) do
+    %Item{}
+    |> Item.changeset(attrs)
+    |> Repo.insert()
   end
 
   @search [Item, Category]
