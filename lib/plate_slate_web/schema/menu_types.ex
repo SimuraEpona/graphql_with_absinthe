@@ -41,6 +41,17 @@ defmodule PlateSlateWeb.Schema.MenuTypes do
     end)
   end
 
+  object :menu_item_result do
+    field :menu_item, :menu_item
+    field :errors, list_of(:input_error)
+  end
+
+  @desc "An error encountered tyring to persist input"
+  object :input_error do
+    field :key, non_null(:string)
+    field :message, non_null(:string)
+  end
+
   object :menu_item do
     interfaces([:search_result])
     field :id, :id
