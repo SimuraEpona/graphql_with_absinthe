@@ -123,9 +123,7 @@ defmodule PlateSlateWeb.Schema.Query.MenuItemsTest do
     assert %{
              "errors" => [
                %{
-                 "locations" => [
-                   %{"column" => 0, "line" => 2}
-                 ],
+                 "locations" => [%{"column" => _, "line" => _}],
                  "message" => message
                }
              ]
