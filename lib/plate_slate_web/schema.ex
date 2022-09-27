@@ -9,6 +9,7 @@ defmodule PlateSlateWeb.Schema do
   import_types(Absinthe.Type.Custom)
   import_types(__MODULE__.MenuTypes)
   import_types(__MODULE__.OrderingTypes)
+  import_types(__MODULE__.AccountsTypes)
 
   def middleware(middleware, _field, %{identifier: :mutation}) do
     middleware ++ [Middleware.ChangesetErrors]
@@ -39,6 +40,13 @@ defmodule PlateSlateWeb.Schema do
   end
 
   mutation do
+    field :login, :session do
+      arg(:email, non_null(:string))
+      arg(:password, non_null(:string))
+      arg(:role, non_null(:role))
+      resolve(&Resolvers.Accounts.login/3)
+    end
+
     field :create_menu_item, :menu_item_result do
       arg(:input, non_null(:menu_item_input))
       resolve(&Resolvers.Menu.create_item/3)
