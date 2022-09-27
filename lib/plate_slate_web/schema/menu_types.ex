@@ -59,6 +59,12 @@ defmodule PlateSlateWeb.Schema.MenuTypes do
     field :description, :string
     field :price, :decimal
     field :added_on, :date
+    field :allergy_info, list_of(:allergy_info)
+  end
+
+  object :allergy_info do
+    field :allergen, :string
+    field :severity, :string
   end
 
   input_object :menu_item_input do
