@@ -10,6 +10,14 @@ defmodule PlateSlateWeb.Schema do
   import_types(__MODULE__.MenuTypes)
   import_types(__MODULE__.OrderingTypes)
 
+  def middleware(middleware, _field, %{identifier: :mutation}) do
+    middleware ++ [Middleware.ChangesetErrors]
+  end
+
+  def middleware(middleware, _field, _object) do
+    middleware
+  end
+
   query do
     @desc "The list of available items on the menu"
     field :menu_items, list_of(:menu_item) do
