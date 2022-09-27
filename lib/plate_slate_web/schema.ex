@@ -1,6 +1,7 @@
 defmodule PlateSlateWeb.Schema do
   use Absinthe.Schema
   alias PlateSlateWeb.Resolvers
+  alias PlateSlateWeb.Schema.Middleware
 
   ## CH05 add decimal, doesn't work well in Phoenix v1.6 & absinthe 1.7.0
   ## instead use import_types Absinthe.Type.Custom
@@ -27,6 +28,7 @@ defmodule PlateSlateWeb.Schema do
     field :create_menu_item, :menu_item_result do
       arg(:input, non_null(:menu_item_input))
       resolve(&Resolvers.Menu.create_item/3)
+      middleware(Middleware.ChangesetErrors)
     end
 
     field :place_order, :order_result do
