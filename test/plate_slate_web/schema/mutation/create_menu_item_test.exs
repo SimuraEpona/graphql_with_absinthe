@@ -29,6 +29,25 @@ defmodule PlateSlateWeb.Schema.Mutation.CreateMenuItemTest do
   }
   """
 
+  test "must be authorized as an employee to do menu item creation", %{category_id: category_id} do
+    menu_item = %{
+      "name" => "French Dip",
+      "description" => "Roast beef, caramelized onions, horseradish, ...",
+      "price" => "5.75",
+      "categoryId" => category_id
+    }
+
+    user = Factory.create_user("customer")
+    conn = build_conn() |> auth_user(user)
+
+    conn = post(conn, "/api", query: @query, variables: %{"menuItem" => menu_item})
+
+    assert %{
+             "data" => %{"createMenuItem" => nil},
+             "errors" => [%{"message" => "unauthorized", "path" => ["createMenuItem"]}]
+           } = json_response(conn, 200)
+  end
+
   test "createMenuItem field creates an item", %{category_id: category_id} do
     menu_item = %{
       "name" => "French Dip",
@@ -37,7 +56,8 @@ defmodule PlateSlateWeb.Schema.Mutation.CreateMenuItemTest do
       "categoryId" => category_id
     }
 
-    conn = build_conn()
+    user = Factory.create_user("employee")
+    conn = build_conn() |> auth_user(user)
 
     conn = post(conn, "/api", query: @query, variables: %{"menuItem" => menu_item})
 
@@ -63,7 +83,8 @@ defmodule PlateSlateWeb.Schema.Mutation.CreateMenuItemTest do
       "categoryId" => category_id
     }
 
-    conn = build_conn()
+    user = Factory.create_user("employee")
+    conn = build_conn() |> auth_user(user)
 
     conn = post(conn, "/api", query: @query, variables: %{"menuItem" => menu_item})
 
@@ -75,5 +96,10 @@ defmodule PlateSlateWeb.Schema.Mutation.CreateMenuItemTest do
                }
              }
            } = json_response(conn, 200)
+  end
+
+  defp auth_user(conn, user) do
+    token = PlateSlateWeb.Authentication.sign(%{role: user.role, id: user.id})
+    put_req_header(conn, "authorization", "Bearer #{token}")
   end
 end

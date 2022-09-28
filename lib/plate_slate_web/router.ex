@@ -12,6 +12,7 @@ defmodule PlateSlateWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug PlateSlateWeb.Context
   end
 
   scope "/", PlateSlateWeb do
@@ -26,7 +27,6 @@ defmodule PlateSlateWeb.Router do
 
     forward "/graphiql", Absinthe.Plug.GraphiQL,
       schema: PlateSlateWeb.Schema,
-      interface: :simple,
       socket: PlateSlateWeb.UserSocket
 
     forward "/api", Absinthe.Plug, schema: PlateSlateWeb.Schema
