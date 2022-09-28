@@ -37,6 +37,11 @@ defmodule PlateSlateWeb.Schema do
       arg(:matching, non_null(:string))
       resolve(&Resolvers.Menu.search/3)
     end
+
+    field :me, :user do
+      middleware(Middleware.Authorize, :any)
+      resolve(&Resolvers.Accounts.me/3)
+    end
   end
 
   mutation do
@@ -79,8 +84,17 @@ defmodule PlateSlateWeb.Schema do
 
   subscription do
     field :new_order, :order do
-      config(fn _args, _info ->
-        {:ok, topic: "*"}
+      config(fn _args, %{context: context} ->
+        case context[:current_user] do
+          %{role: "customer", id: id} ->
+            {:ok, topic: id}
+
+          %{role: "employee"} ->
+            {:ok, topic: "*"}
+
+          _ ->
+            {:error, "unauthorized"}
+        end
       end)
     end
 
