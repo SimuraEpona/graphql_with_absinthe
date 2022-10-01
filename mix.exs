@@ -38,6 +38,7 @@ defmodule PlateSlate.MixProject do
       {:phoenix_ecto, "~> 4.4"},
       {:comeonin_ecto_password, "~> 3.0.0"},
       {:pbkdf2_elixir, "~> 1.0"},
+      {:dataloader, "~> 1.0.0"},
       {:ecto_sql, "~> 3.6"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.0"},
