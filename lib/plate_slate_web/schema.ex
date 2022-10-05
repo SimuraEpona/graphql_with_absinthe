@@ -10,6 +10,7 @@ defmodule PlateSlateWeb.Schema do
   import_types(__MODULE__.MenuTypes)
   import_types(__MODULE__.OrderingTypes)
   import_types(__MODULE__.AccountsTypes)
+  import_types(Absinthe.Phoenix.Types)
 
   def plugins do
     [Absinthe.Middleware.Dataloader | Absinthe.Plugin.defaults()]
@@ -51,6 +52,16 @@ defmodule PlateSlateWeb.Schema do
 
   def context(ctx) do
     Map.put(ctx, :loader, dataloader())
+  end
+
+  # import_types(Absinthe.Phoenix.Types) won't work for now.
+  # copy source code to schema.ex
+  directive :put do
+    on([:field, :fragment_spread, :inline_fragment])
+
+    expand(fn _args, node ->
+      Absinthe.Blueprint.put_flag(node, :put, __MODULE__)
+    end)
   end
 
   query do

@@ -10,6 +10,10 @@ defmodule PlateSlateWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :admin_auth do
+    plug PlateSlateWeb.AdminAuth
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
     plug PlateSlateWeb.Context
@@ -30,6 +34,18 @@ defmodule PlateSlateWeb.Router do
       socket: PlateSlateWeb.UserSocket
 
     forward "/api", Absinthe.Plug, schema: PlateSlateWeb.Schema
+  end
+
+  scope "/admin", PlateSlateWeb do
+    pipe_through [:browser]
+
+    resources "/session", SessionController, only: [:new, :create, :delete], singleton: true
+  end
+
+  scope "/admin", PlateSlateWeb do
+    pipe_through [:browser, :admin_auth]
+
+    resources "/items", ItemController
   end
 
   # Enables LiveDashboard only for development
