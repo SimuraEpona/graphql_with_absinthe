@@ -6,6 +6,7 @@
 
       <th>Menu Item</th>
       <th>Category</th>
+      <th>Quantity</th>
       <th></th>
     </tr>
   </thead>
@@ -14,6 +15,7 @@
     <tr>
     <td> <%= item.name %> </td>
     <td> <%= item.category.name %> </td>
+    <td> <%= item.order_history.quantity %> </td>
       <td>
         <span><%= link "Show", to: Routes.item_path(@conn, :show, item) %></span>
         <span><%= link "Edit", to: Routes.item_path(@conn, :edit, item) %></span>

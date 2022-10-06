@@ -72,6 +72,11 @@ defmodule PlateSlateWeb.Schema do
       resolve(&Resolvers.Menu.menu_items/3)
     end
 
+    field :menu_item, :menu_item do
+      arg(:id, non_null(:id))
+      resolve(&Resolvers.Menu.get_item/3)
+    end
+
     field :search, list_of(:search_result) do
       arg(:matching, non_null(:string))
       resolve(&Resolvers.Menu.search/3)
